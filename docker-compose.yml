@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  target_1:
+    container_name: target_1
+    hostname: target_1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:9997"
+    volumes:
+      - ./cribl/assignment/target:/app/target/conf
+      - ./target_1_mount:/app/target1
+    command: >
+      sh -c "cd /app/target1 && node /cribl/assigment/app.js /app/target/conf"
+  target_2:
+    container_name: target_2
+    hostname: target_2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:9997"
+    volumes:
+      - ./cribl/assignment/target:/app/target/conf
+      - ./target_2_mount:/app/target2
+    command: >
+      sh -c "cd /app/target2 && node /cribl/assigment/app.js /app/target/conf"
+  splitter:
+    container_name: splitter
+    hostname: splitter
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8002:9997"
+    volumes:
+      - ./cribl/assignment/splitter:/app/splitter/conf
+    depends_on:
+      - target_1
+      - target_2
+    command: ["node", "app.js", "/app/splitter/conf"]
+  agent:
+    container_name: agent
+    hostname: agent
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./cribl/assignment/agent:/app/agent/conf
+    depends_on:
+      - splitter
+    command: ["sh", "-c", "node app.js /app/agent/conf && echo 'agent exited'"]
