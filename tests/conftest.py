@@ -6,14 +6,14 @@ from docker_utils.dockercomposelogs import DockerComposeLogManager
 import ssl
 from helpers.fileobserver import observe_directories
 import pytest
+from datetime import datetime
+from helpers.archiver import *
 
 #todo multiple parameter
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session", params=[100,10000,1000000])
 def setup():
     ssl._create_default_https_context = ssl._create_unverified_context
-    create_directory('./target_1_mount')
-    create_directory('./target_2_mount')
-    create_directory('./artifacts')
+    create_directory(['./target_1_mount', './target_2_mount', './artifacts', './cribl'])
     setup = Setup("https://drive.google.com/u/0/uc?id=16k1na8UA0THRBQbKSeo8t_spX1ehkXwx&export=download",
                   "./assigment.tar.gz")
     setup.download_and_extract(output_path="./cribl")
@@ -21,7 +21,8 @@ def setup():
     observe_directories('./target_1_mount', './target_2_mount', './artifacts/target_1.txt', './artifacts/target_2.txt')
     setup.docker_compose_logs()
     yield
-    # setup.docker("down")
+    setup.archive()
+    setup.docker("down")
 
 
 class Setup:
@@ -30,7 +31,6 @@ class Setup:
         self.filename = filename
 
     def download_and_extract(self, output_path="."):
-        create_directory(output_path)
 
         downloader = FileDownloader(self.url, self.filename)
         downloader.download()
@@ -49,25 +49,7 @@ class Setup:
     def docker_compose_logs(self):
         log_manager = DockerComposeLogManager("./docker-compose.yml", "./artifacts/docker-compose-logs.txt")
         log_manager.save_logs_to_file()
-# setup:
-#     download
-#     uzip
-#     create docker
-# test:
-#     czyszczenie logow
-#     podmiana danych
-#     zebranie artefaktow - archive logs
-#     odpalenie testow
-# teardown:
-#     docker down
 
-# for plik w pliki:
-#     wycyzsc logi
-#     podmien input
-#     wystartuj agenta
-# time.sleep(3)
-# wez ostatnia linijke z input.log
-# monitoring target hosts to catch timestamp of last line
-# fetch from docker_compose logs timestamps when agent start & stop
-# setup.get_target_files()
-# setup.docker("down")
+    def archive(self):
+        archiver = TestArtifactArchiver('./')
+        archiver.archive_artifacts(['./target_1_mount', './target_2_mount', './artifacts'], f'test_archive_{datetime.utcnow()}_zip')

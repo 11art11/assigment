@@ -45,7 +45,7 @@ def test_content(setup):
     lost_lines = input_file - output
 
     # Check if there are any lost lines
-    assert len(lost_lines) == 0, f"Not all lines were found in target files, lines lost: {lost_lines}"
+    assert len(lost_lines) == 0, f"Not all lines were found in target files, lines lost no {len(lost_lines)}, lost line list: {lost_lines}"
 
 
 
