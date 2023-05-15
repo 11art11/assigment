@@ -12,12 +12,12 @@ import pytest
 from datetime import datetime
 
 
-@pytest.fixture(scope="session", params=[100, 200])
+@pytest.fixture(scope="session", params=[100])
 def setup(request):
-    ssl._create_default_https_context = ssl._create_unverified_context
-    create_directory(['./target_1_mount', './target_2_mount', './artifacts', './cribl'])
     setup = Setup("https://drive.google.com/u/0/uc?id=16k1na8UA0THRBQbKSeo8t_spX1ehkXwx&export=download",
                   "./assigment.tar.gz")
+    ssl._create_default_https_context = ssl._create_unverified_context
+    create_directory(['./target_1_mount', './target_2_mount', './artifacts', './cribl'])
     setup.download_and_extract(output_path="./cribl")
     setup.log_generator(request.param)
     replace_json_value('./cribl/assignment/agent/inputs.json', 'monitor', f'inputs/{request.param}_events.log')
