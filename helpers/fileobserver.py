@@ -23,6 +23,8 @@ class MyHandler(FileSystemEventHandler):
             return
 
         # This method will be called whenever the file is modified
+
+        print(f'file_modifiyed {os.system("ls -la " + event.src_path)}')
         with open(event.src_path, 'r') as f, open(self.log_file_path, 'a') as log_file:
             f.seek(self.last_pos)
             for line in f:
@@ -34,6 +36,7 @@ class MyHandler(FileSystemEventHandler):
 
     def on_created(self, event):
         # This method will be called whenever the file is created
+        print(f'file_created {os.system("ls -la " + event.src_path)}')
         with open(event.src_path, 'r') as f:
             self.last_pos = f.tell()
         self.last_modified_time = time.time()
