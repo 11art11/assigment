@@ -22,10 +22,10 @@ def agent_down_timestamp():
 
 
 # define the last_event_timestamp function
-def last_event_timestamp():
+def last_event_timestamp(input_file):
 
     # open the log file and get its last line
-    with open('./cribl/assignment/agent/inputs/large_1M_events.log', 'r') as f1:
+    with open(input_file, 'r') as f1:
         last_line = f1.readlines()[-1]
 
     # open the first target file and get its last line
@@ -53,13 +53,13 @@ def last_event_timestamp():
 def test_thruput(setup):
 
     # get the size of the input file in kilobytes
-    input_file_size = os.path.getsize('./cribl/assignment/agent/inputs/large_1M_events.log') / 1024
+    input_file_size = os.path.getsize(f'./cribl/assignment/agent/inputs/{setup}_events.log') / 1024
 
     # get the number of lines in the input file
-    input_file_lines = get_line_count('./cribl/assignment/agent/inputs/large_1M_events.log')
+    input_file_lines = get_line_count(f'./cribl/assignment/agent/inputs/{setup}_events.log')
 
     # calculate the time it took to transfer the log file, in milliseconds
-    transfer_time_ms = int((last_event_timestamp() - agent_start_timestamp()).total_seconds() * 1000)
+    transfer_time_ms = int((last_event_timestamp(f'./cribl/assignment/agent/inputs/{setup}_events.log') - agent_start_timestamp()).total_seconds() * 1000)
 
     # calculate the transfer rate in lines per millisecond
     transfer_lines = input_file_lines / transfer_time_ms
@@ -78,7 +78,7 @@ def test_thruput(setup):
 def test_latency(setup):
 
     # calculate the latency between the last event timestamp and the agent down timestamp, in milliseconds
-    latency_ms = int((last_event_timestamp() - agent_down_timestamp()).total_seconds() * 1000)
+    latency_ms = int((last_event_timestamp(f'./cribl/assignment/agent/inputs/{setup}_events.log') - agent_down_timestamp()).total_seconds() * 1000)
 
     # assert that the latency is less than 100 milliseconds
     assert latency_ms < 100, f'Latency bigger than 100ms: {latency_ms}'

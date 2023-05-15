@@ -1,29 +1,32 @@
 from helpers.filedownloader import FileDownloader
+from helpers.replacevalueinjson import replace_json_value
 from helpers.targzextractor import TarGzExtractor
 from helpers.directory import create_directory
+from helpers.archiver import *
+from helpers.inputgenerator import *
 from docker_utils.dockercompose import DockerCompose
 from docker_utils.dockercomposelogs import DockerComposeLogManager
 import ssl
 from helpers.fileobserver import observe_directories
 import pytest
 from datetime import datetime
-from helpers.archiver import *
 
-#todo multiple parameter
-@pytest.fixture(scope="session", params=[100,10000,1000000])
-def setup():
+
+@pytest.fixture(scope="session", params=[100, 200])
+def setup(request):
     ssl._create_default_https_context = ssl._create_unverified_context
     create_directory(['./target_1_mount', './target_2_mount', './artifacts', './cribl'])
     setup = Setup("https://drive.google.com/u/0/uc?id=16k1na8UA0THRBQbKSeo8t_spX1ehkXwx&export=download",
                   "./assigment.tar.gz")
     setup.download_and_extract(output_path="./cribl")
+    setup.log_generator(request.param)
+    replace_json_value('./cribl/assignment/agent/inputs.json', 'monitor', f'inputs/{request.param}_events.log')
     setup.docker("start")
     observe_directories('./target_1_mount', './target_2_mount', './artifacts/target_1.txt', './artifacts/target_2.txt')
     setup.docker_compose_logs()
-    yield
-    setup.archive()
+    yield request.param
+    setup.archive(f'test_archive_{request.param}_events_{datetime.utcnow()}_zip')
     setup.docker("down")
-
 
 class Setup:
     def __init__(self, url, filename):
@@ -50,6 +53,10 @@ class Setup:
         log_manager = DockerComposeLogManager("./docker-compose.yml", "./artifacts/docker-compose-logs.txt")
         log_manager.save_logs_to_file()
 
-    def archive(self):
+    def archive(self, zip_name):
         archiver = TestArtifactArchiver('./')
-        archiver.archive_artifacts(['./target_1_mount', './target_2_mount', './artifacts'], f'test_archive_{datetime.utcnow()}_zip')
+        archiver.archive_artifacts(['./target_1_mount', './target_2_mount', './artifacts'], zip_name)
+
+    def log_generator(self, log_lenght):
+        log_generator = LogCreator()
+        log_generator.create_logs(log_lenght)

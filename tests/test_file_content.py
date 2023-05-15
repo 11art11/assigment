@@ -10,7 +10,7 @@ def test_boundary(setup):
     found_lines = []
 
     # Open the source file and read its lines
-    with open("./cribl/assignment/agent/inputs/large_1M_events.log", 'r') as file:
+    with open(f"./cribl/assignment/agent/inputs/{setup}_events.log", 'r') as file:
         lines = file.readlines()
         # Add the first, last and middle lines to the list of lines to search for
         lines_to_find.append(lines[0])
@@ -34,7 +34,7 @@ def test_content(setup):
     Test that all lines in the input file are found in the target files.
     """
     # Read input file and target files into sets
-    input_file = set(line.strip() for line in open('./cribl/assignment/agent/inputs/large_1M_events.log'))
+    input_file = set(line.strip() for line in open(f'./cribl/assignment/agent/inputs/{setup}_events.log'))
     target_1 = set(line.strip() for line in open('./target_1_mount/events.log'))
     target_2 = set(line.strip() for line in open('./target_2_mount/events.log'))
 
@@ -74,7 +74,7 @@ def test_sum_lines(setup):
     """
     target1_lines = get_line_count('./target_1_mount/events.log')
     target2_lines = get_line_count('./target_2_mount/events.log')
-    input_file_line_count = get_line_count('./cribl/assignment/agent/inputs/large_1M_events.log')
+    input_file_line_count = get_line_count(f'./cribl/assignment/agent/inputs/{setup}_events.log')
     assert target1_lines + target2_lines == input_file_line_count, \
         f"Line count mismatch: target1={target1_lines}, target2={target2_lines}, input={input_file_line_count}"
 
@@ -85,7 +85,7 @@ def test_balancing(setup):
     """
     target1_lines = get_line_count('./target_1_mount/events.log')
     target2_lines = get_line_count('./target_2_mount/events.log')
-    input_file_line_count = get_line_count('./cribl/assignment/agent/inputs/large_1M_events.log')
+    input_file_line_count = get_line_count(f'./cribl/assignment/agent/inputs/{setup}_events.log')
     line_count_diff = abs(target1_lines - target2_lines)
     assert line_count_diff < 0.02 * input_file_line_count, \
         f"Line count difference too large: {line_count_diff / input_file_line_count * 100}%"
