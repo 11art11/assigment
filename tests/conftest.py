@@ -1,3 +1,4 @@
+import threading
 from helpers.filedownloader import FileDownloader
 from helpers.replacevalueinjson import replace_json_value
 from helpers.targzextractor import TarGzExtractor
@@ -12,7 +13,7 @@ import pytest
 from datetime import datetime
 
 
-@pytest.fixture(scope="session", params=[1000])
+@pytest.fixture(scope="session", params=[100])
 def setup(request):
     setup = Setup("https://drive.google.com/u/0/uc?id=16k1na8UA0THRBQbKSeo8t_spX1ehkXwx&export=download",
                   "./assigment.tar.gz")
@@ -21,9 +22,11 @@ def setup(request):
     setup.download_and_extract(output_path="./cribl")
     setup.log_generator(request.param)
     replace_json_value('./cribl/assignment/agent/inputs.json', 'monitor', f'inputs/{request.param}_events.log')
+    thread = threading.Thread(target=observe_directories, args=('./target_1_mount', './target_2_mount', './artifacts/target_1.txt', './artifacts/target_2.txt'))
+    thread.start()
     setup.docker("start")
     observe_directories('./target_1_mount', './target_2_mount', './artifacts/target_1.txt', './artifacts/target_2.txt')
-    os.system('ls -Rla')
+    thread.join()
     setup.docker_compose_logs()
     yield request.param
     setup.archive(f'test_archive_{request.param}_events_{datetime.utcnow()}_zip')

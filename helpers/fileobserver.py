@@ -13,16 +13,13 @@ class MyHandler(FileSystemEventHandler):
         self.log_file_path = log_file_path
 
     def on_modified(self, event):
-        print(f'on_modifiyed {event}')
         # This method will be called whenever a file is modified in the observed directories
         if event.is_directory:
-            # print(f'is dir {os.system("ls - la " + event.src_path)}')
             # Ignore directory events
             return
 
         # Check if event.src_path is a file
         if not os.path.isfile(event.src_path):
-            # print(f'no file {os.system("ls -la " + event.src_path)}')
             return
 
         # This method will be called whenever the file is modified
@@ -58,9 +55,9 @@ def observe_directories(dir1_path, dir2_path, log_file_path, log_file_path_2):
     observer_2.start()
     print('observer_2 started')
 
-    # Wait for changes and stop if there are no changes for 5 seconds
+    # Wait for changes and stop if there are no changes for 10 seconds
     while True:
-        if time.time() - max(event_handler_1.last_modified_time, event_handler_2.last_modified_time) > 20:
+        if time.time() - max(event_handler_1.last_modified_time, event_handler_2.last_modified_time) > 10:
             observer_1.stop()
             observer_2.stop()
             print('observers_stopped')
