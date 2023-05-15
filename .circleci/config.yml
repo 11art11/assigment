@@ -30,7 +30,7 @@ jobs:
     steps:
       # setup docker
       - setup_remote_docker:
-          version: 23.0.5
+          version: 20.10.18
       - checkout
       - python/install-packages:
           pkg-manager: pip
