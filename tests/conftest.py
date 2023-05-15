@@ -12,7 +12,7 @@ import pytest
 from datetime import datetime
 
 
-@pytest.fixture(scope="session", params=[1000000])
+@pytest.fixture(scope="session", params=[100, 1000000])
 def setup(request):
     setup = Setup("https://drive.google.com/u/0/uc?id=16k1na8UA0THRBQbKSeo8t_spX1ehkXwx&export=download",
                   "./assigment.tar.gz")
@@ -27,7 +27,7 @@ def setup(request):
     setup.docker_compose_logs()
     yield request.param
     setup.archive(f'test_archive_{request.param}_events_{datetime.utcnow()}_zip')
-    # setup.docker("down")
+    setup.docker("down")
 
 class Setup:
     def __init__(self, url, filename):
