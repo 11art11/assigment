@@ -25,7 +25,7 @@ def setup(request):
     thread = threading.Thread(target=observe_directories, args=('./target_1_mount', './target_2_mount', './artifacts/target_1.txt', './artifacts/target_2.txt'))
     thread.start()
     setup.docker("start")
-    observe_directories('./target_1_mount', './target_2_mount', './artifacts/target_1.txt', './artifacts/target_2.txt')
+    # observe_directories('./target_1_mount', './target_2_mount', './artifacts/target_1.txt', './artifacts/target_2.txt')
     thread.join()
     setup.docker_compose_logs()
     yield request.param
