@@ -19,6 +19,8 @@ def setup(request):
     ssl._create_default_https_context = ssl._create_unverified_context
     create_directory(['./target_1_mount', './target_2_mount', './artifacts', './cribl'])
     setup.download_and_extract(output_path="./cribl")
+    os.system('pwd')
+    os.system('ls -Rla')
     setup.log_generator(request.param)
     replace_json_value('./cribl/assignment/agent/inputs.json', 'monitor', f'inputs/{request.param}_events.log')
     setup.docker("start")
