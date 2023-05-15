@@ -13,7 +13,7 @@ import pytest
 from datetime import datetime
 
 
-@pytest.fixture(scope="session", params=[100])
+@pytest.fixture(scope="session", params=[100, 10000, 1000000])
 def setup(request):
     setup = Setup("https://drive.google.com/u/0/uc?id=16k1na8UA0THRBQbKSeo8t_spX1ehkXwx&export=download",
                   "./assigment.tar.gz")
@@ -22,10 +22,9 @@ def setup(request):
     setup.download_and_extract(output_path="./cribl")
     setup.log_generator(request.param)
     replace_json_value('./cribl/assignment/agent/inputs.json', 'monitor', f'inputs/{request.param}_events.log')
-    thread = threading.Thread(target=observe_directories, args=('./target_1_mount', './target_2_mount', './artifacts/target_1.txt', './artifacts/target_2.txt'))
+    thread = threading.Thread(target=observe_directories, args=('./target_1_mount', './target_2_mount', './artifacts/target_1.txt', './artifacts/target_2.txt', f'./cribl/assignment/agent/inputs/{request.param}_events.log'))
     thread.start()
     setup.docker("start")
-    # observe_directories('./target_1_mount', './target_2_mount', './artifacts/target_1.txt', './artifacts/target_2.txt')
     thread.join()
     setup.docker_compose_logs()
     yield request.param
@@ -46,7 +45,6 @@ class Setup:
         extractor.extract(output_path)
 
     def docker(self, action):
-        # todo remove hardcode
         docker_compose = DockerCompose('./docker-compose.yml')
         if action == "start":
             docker_compose.start()
