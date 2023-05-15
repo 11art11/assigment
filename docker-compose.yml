@@ -10,10 +10,10 @@ services:
     ports:
       - "8000:9997"
     volumes:
-      - /home/circleci/project/cribl/assignment/target:/app/target/conf
-      - /home/circleci/project/target_1_mount:/app/target1
+      - ./cribl/assignment/target:/app/target/conf
+      - ./target_1_mount:/app/target1
     command: >
-      sh -c "ls -Rla / && pwd && ls -la /app/target/conf && cd /app/target1 && node /cribl/assigment/app.js /app/target/conf"
+      sh -c "ls -Rla /app && pwd && ls -la /app/target/conf && cd /app/target1 && node /cribl/assigment/app.js /cribl/assigment/target"
   target_2:
     container_name: target_2
     hostname: target_2
@@ -26,7 +26,7 @@ services:
       - ./cribl/assignment/target:/app/target/conf
       - ./target_2_mount:/app/target2
     command: >
-      sh -c "cd /app/target2 && node /cribl/assigment/app.js /app/target/conf"
+      sh -c "cd /app/target2 && node /cribl/assigment/app.js /cribl/assigment/target"
   splitter:
     container_name: splitter
     hostname: splitter
@@ -40,7 +40,7 @@ services:
     depends_on:
       - target_1
       - target_2
-    command: ["node", "app.js", "/app/splitter/conf"]
+    command: ["node", "app.js", "/cribl/assigment/splitter"]
   agent:
     container_name: agent
     hostname: agent
@@ -51,4 +51,4 @@ services:
       - ./cribl/assignment/agent:/app/agent/conf
     depends_on:
       - splitter
-    command: ["sh", "-c", "node app.js /app/agent/conf && echo 'agent exited'"]
+    command: ["sh", "-c", "node app.js /cribl/assigment/agent && echo 'agent exited'"]
