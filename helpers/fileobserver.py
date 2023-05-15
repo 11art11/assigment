@@ -27,7 +27,7 @@ class MyHandler(FileSystemEventHandler):
         # This method will be called whenever the file is modified
 
         with open(event.src_path, 'r') as f, open(self.log_file_path, 'a') as log_file, open(self.input_file, 'r') as input:
-            stop_line = f.readlines()[-1]
+            stop_line = input.readlines()[-1]
             f.seek(self.last_pos)
             for line in f:
                 timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
