@@ -10,8 +10,8 @@ services:
     ports:
       - "8000:9997"
     volumes:
-      - ./cribl/assignment/target:/app/target/conf
-      - ./target_1_mount:/app/target1
+      - /home/circleci/project/cribl/assignment/target:/app/target/conf
+      - /home/circleci/project/target_1_mount:/app/target1
     command: >
       sh -c "ls -Rla && pwd && ls -la /app/target/conf && cd /app/target1 && node /cribl/assigment/app.js /app/target/conf"
   target_2:
