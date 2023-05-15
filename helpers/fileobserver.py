@@ -13,18 +13,20 @@ class MyHandler(FileSystemEventHandler):
         self.log_file_path = log_file_path
 
     def on_modified(self, event):
+        print(f'on_modifiyed {os.system("ls -la " + event.src_path)}')
         # This method will be called whenever a file is modified in the observed directories
         if event.is_directory:
+            print(f'is dir {os.system("ls -la " + event.src_path)}')
             # Ignore directory events
             return
 
         # Check if event.src_path is a file
         if not os.path.isfile(event.src_path):
+            print(f'no file {os.system("ls -la " + event.src_path)}')
             return
 
         # This method will be called whenever the file is modified
 
-        print(f'file_modifiyed {os.system("ls -la " + event.src_path)}')
         with open(event.src_path, 'r') as f, open(self.log_file_path, 'a') as log_file:
             f.seek(self.last_pos)
             for line in f:
