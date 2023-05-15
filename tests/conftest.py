@@ -12,7 +12,7 @@ import pytest
 from datetime import datetime
 
 
-@pytest.fixture(scope="session", params=[100])
+@pytest.fixture(scope="session", params=[100000])
 def setup(request):
     setup = Setup("https://drive.google.com/u/0/uc?id=16k1na8UA0THRBQbKSeo8t_spX1ehkXwx&export=download",
                   "./assigment.tar.gz")
