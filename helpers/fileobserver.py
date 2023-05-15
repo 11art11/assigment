@@ -55,10 +55,10 @@ def observe_directories(dir1_path, dir2_path, log_file_path, log_file_path_2):
     observer_2.start()
     print('observer_2 started')
 
-    # Wait for changes and stop if there are no changes for 10 seconds
+    # Wait for changes and stop if there are no changes for 100 seconds
     while True:
         time.sleep(0.01)
-        if time.time() - max(event_handler_1.last_modified_time, event_handler_2.last_modified_time) > 300:
+        if time.time() - max(event_handler_1.last_modified_time, event_handler_2.last_modified_time) > 100:
             observer_1.stop()
             observer_2.stop()
             print('observers_stopped')
