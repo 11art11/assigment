@@ -28,7 +28,7 @@ def setup(request):
     setup.docker_compose_logs()
     yield request.param
     setup.archive(f'test_archive_{request.param}_events_{datetime.utcnow()}_zip')
-    setup.docker("down")
+    # setup.docker("down")
 
 class Setup:
     def __init__(self, url, filename):

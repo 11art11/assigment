@@ -13,7 +13,7 @@ services:
       - ./cribl/assignment/target:/app/target/conf
       - ./target_1_mount:/app/target1
     command: >
-      sh -c "ls -Rla /app && pwd && ls -la /app/target/conf && cd /app/target1 && node /cribl/assigment/app.js /cribl/assigment/target"
+      sh -c "cd /app/target1 && node /cribl/assigment/app.js /cribl/assigment/target"
   target_2:
     container_name: target_2
     hostname: target_2
