@@ -1,6 +1,6 @@
 import os
-import shutil
 import zipfile
+
 
 class TestArtifactArchiver:
     def __init__(self, artifacts_dir):
@@ -28,4 +28,3 @@ class TestArtifactArchiver:
                             file_path = os.path.join(root, file)
                             zip_file.write(file_path, os.path.join(os.path.relpath(path), file))
         print(f'Archive {archive_name} has been created in {self.artifacts_dir}')
-
