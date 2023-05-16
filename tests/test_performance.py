@@ -1,7 +1,6 @@
 import os
 from helpers.linecounter import get_line_count
 from helpers.readtimestamp import *
-from fixtures.conftest import setup
 
 
 def agent_start_timestamp():

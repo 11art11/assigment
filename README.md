@@ -16,6 +16,15 @@ This project demonstrate:
 * Run tests:
 
         python -m pytest tests
+## Behaviour
+* Downloads and extracts the application under test.
+* Creates a set of input data for the test.
+* Deploys the application on Docker using Docker Compose.
+* Executes the tests on the deployed application.
+* Archives the test artifacts for future reference or analysis.
+* Removes the Docker containers after the tests are completed.
+
+The purpose of this setup is to ensure a controlled environment for testing the application. By downloading and deploying the application, creating specific input data, and running the tests in a containerized environment, the setup helps ensure consistency and reproducibility of the test results. The archiving of test artifacts allows for further investigation and analysis if needed. Finally, the cleanup of Docker containers helps maintain the test environment clean and ready for subsequent tests.
 
 ## Project Structure
     assigment/
@@ -26,12 +35,11 @@ This project demonstrate:
     ├── docker_utils/
     │   ├── dockercompose.py      # perform docker compose actions
     │   ├── dockercomposelogs.py  # get docker compose logs
-    ├── fixtures/
-    │   ├── conftest.py           # setup/teardown fixture
     ├── helpers/                  # set of helpers
     │   ├── fileobserver.py       # live monitoring on files
     │   └── ...          
     ├── tests/                  
+    │   ├── conftest.py           # setup/teardown fixture
     │   ├── test_file_content.py  # set of test for content validation
     │   └── test_performance.py   # set of performance tests
     ├── requirements.txt

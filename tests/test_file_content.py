@@ -1,5 +1,4 @@
 from helpers.linecounter import get_line_count
-from fixtures.conftest import setup
 
 
 def test_boundary(setup):

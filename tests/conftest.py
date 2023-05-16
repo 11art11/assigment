@@ -81,7 +81,7 @@ class Setup:
         log_manager.save_logs_to_file()
 
     def archive(self, source_paths, zip_name):
-        archiver = TestArtifactArchiver('../tests/')
+        archiver = TestArtifactArchiver('.')
         archiver.archive_artifacts(source_paths, zip_name)
 
     def log_generator(self, log_lenght):
