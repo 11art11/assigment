@@ -7,8 +7,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8000:9997"
     volumes:
       - ./cribl/assignment/target:/app/target/conf
       - ./target_1_mount:/app/target1
@@ -20,8 +18,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8001:9997"
     volumes:
       - ./cribl/assignment/target:/app/target/conf
       - ./target_2_mount:/app/target2
@@ -33,8 +29,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8002:9997"
     volumes:
       - ./cribl/assignment/splitter:/app/splitter/conf
     depends_on:
