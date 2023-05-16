@@ -1,6 +1,7 @@
 import os
 from helpers.linecounter import get_line_count
 from helpers.readtimestamp import *
+from fixtures.conftest import setup
 
 
 def agent_start_timestamp():
@@ -49,9 +50,11 @@ def last_event_timestamp(input_file):
     return last_event
 
 
-# define the test_thruput function
-def test_thruput(setup):
 
+def test_thruput(setup):
+    """
+    Test throughput in lines/ms and kb/ms
+    """
     # get the size of the input file in kilobytes
     input_file_size = os.path.getsize(f'./cribl/assignment/agent/inputs/{setup}_events.log') / 1024
 
@@ -76,7 +79,9 @@ def test_thruput(setup):
 
 # define the test_latency function
 def test_latency(setup):
-
+    """
+    Test latency
+    """
     # calculate the latency between the last event timestamp and the agent down timestamp, in milliseconds
     latency_ms = int((last_event_timestamp(f'./cribl/assignment/agent/inputs/{setup}_events.log') - agent_down_timestamp()).total_seconds() * 1000)
 

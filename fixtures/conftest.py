@@ -56,7 +56,7 @@ class Setup:
         log_manager.save_logs_to_file()
 
     def archive(self, zip_name):
-        archiver = TestArtifactArchiver('./')
+        archiver = TestArtifactArchiver('../tests/')
         archiver.archive_artifacts(['./target_1_mount', './target_2_mount', './artifacts'], zip_name)
 
     def log_generator(self, log_lenght):

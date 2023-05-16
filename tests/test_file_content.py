@@ -1,4 +1,5 @@
 from helpers.linecounter import get_line_count
+from fixtures.conftest import setup
 
 
 def test_boundary(setup):
@@ -26,12 +27,14 @@ def test_boundary(setup):
                     found_lines.append(line)
 
     # Assert that all lines were found in the target files
-    assert len(found_lines) == len(lines_to_find), "Not all lines were found in target files"
+    assert len(found_lines) == len(
+        lines_to_find), f"Not all lines were found in target files, lost lines {list(set(lines_to_find) - set(found_lines))} "
 
 
 def test_content(setup):
     """
     Test that all lines in the input file are found in the target files.
+    Limitation: The test will not work for files that exceed the available memory.
     """
     # Read input file and target files into sets
     input_file = set(line.strip() for line in open(f'./cribl/assignment/agent/inputs/{setup}_events.log'))
@@ -39,19 +42,20 @@ def test_content(setup):
     target_2 = set(line.strip() for line in open('./target_2_mount/events.log'))
 
     # Combine target sets into one set
-    output = target_2.union(target_1)
+    output = target_1.union(target_2)
 
     # Find lines in input file that are not in target set
     lost_lines = input_file - output
 
     # Check if there are any lost lines
-    assert len(lost_lines) == 0, f"Not all lines were found in target files, lines lost no {len(lost_lines)}, lost line list: {lost_lines}"
-
+    assert len(lost_lines) == 0, f"Not all lines were found in target files, lines lost no {len(lost_lines)}, lost " \
+                                 f"line list: {lost_lines} "
 
 
 def test_duplicates(setup):
     """
     Test that there are no duplicate entries in the target files.
+    Limitation: The test will not work for files that exceed the available memory.
     """
     # file names of the files whose entries will be compared
     target1_log = './target_1_mount/events.log'

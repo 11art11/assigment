@@ -51,13 +51,11 @@ def observe_directories(dir1_path, dir2_path, log_file_path, log_file_path_2, in
     observer_1 = Observer()
     observer_1.schedule(event_handler_1, path=dir1_path, recursive=False)
     observer_1.start()
-    print('observer_1 started')
 
     event_handler_2 = MyHandler(log_file_path_2, input_file)
     observer_2 = Observer()
     observer_2.schedule(event_handler_2, path=dir2_path, recursive=False)
     observer_2.start()
-    print('observer_2 started')
 
     # Wait for changes and stop if there are no changes for 100 seconds
     while True:
@@ -66,7 +64,6 @@ def observe_directories(dir1_path, dir2_path, log_file_path, log_file_path_2, in
                 (event_handler_1.stop_line_found or event_handler_2.stop_line_found):
             observer_1.stop()
             observer_2.stop()
-            print('observers_stopped')
             break
 
     observer_1.join()
