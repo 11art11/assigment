@@ -23,7 +23,6 @@ def agent_down_timestamp():
 
 # define the last_event_timestamp function
 def last_event_timestamp(input_file):
-
     # open the log file and get its last line
     with open(input_file, 'r') as f1:
         last_line = f1.readlines()[-1]
@@ -43,14 +42,14 @@ def last_event_timestamp(input_file):
         last_event = extract_events_log_timestamp(last_line_target2)
     else:
         # if neither target file contains the last line, extract the timestamps from both target files and return the max
-        last_event = max(extract_events_log_timestamp(last_line_target1), extract_events_log_timestamp(last_line_target2))
+        last_event = max(extract_events_log_timestamp(last_line_target1),
+                         extract_events_log_timestamp(last_line_target2))
 
     # return the timestamp of the last event
     return last_event
 
 
-
-def test_thruput(setup):
+def test_throughput(setup):
     """
     Test throughput in lines/ms and kb/ms
     """
@@ -61,7 +60,8 @@ def test_thruput(setup):
     input_file_lines = get_line_count(f'./cribl/assignment/agent/inputs/{setup}_events.log')
 
     # calculate the time it took to transfer the log file, in milliseconds
-    transfer_time_ms = int((last_event_timestamp(f'./cribl/assignment/agent/inputs/{setup}_events.log') - agent_start_timestamp()).total_seconds() * 1000)
+    transfer_time_ms = int((last_event_timestamp(
+        f'./cribl/assignment/agent/inputs/{setup}_events.log') - agent_start_timestamp()).total_seconds() * 1000)
 
     # calculate the transfer rate in lines per millisecond
     transfer_lines = input_file_lines / transfer_time_ms
@@ -82,7 +82,8 @@ def test_latency(setup):
     Test latency
     """
     # calculate the latency between the last event timestamp and the agent down timestamp, in milliseconds
-    latency_ms = int((last_event_timestamp(f'./cribl/assignment/agent/inputs/{setup}_events.log') - agent_down_timestamp()).total_seconds() * 1000)
+    latency_ms = int((last_event_timestamp(
+        f'./cribl/assignment/agent/inputs/{setup}_events.log') - agent_down_timestamp()).total_seconds() * 1000)
 
     # assert that the latency is less than 100 milliseconds
     assert latency_ms < 100, f'Latency bigger than 100ms: {latency_ms}'

@@ -51,3 +51,21 @@ The purpose of this setup is to ensure a controlled environment for testing the 
 * The written tests are black-box tests, focusing on the external behavior of the application.
 * The only change made to the application is the modification of input data.
 * No additional intermediary infrastructure has been added, implying that the tests interact directly with the application without any intermediate components or systems.
+
+## Tests Description:
+* test_boundary:
+  * Test if boundary lines were transferred to target hosts, to check if borderline were transferred 
+* test_content:
+  * Test to check if all lines were transferred correctly to target host
+    * Assumption is files size will not exceed available memory
+* test_duplicates:
+  * Test to check if there are no duplicates in outputs from targets
+    * Assumption is files size will not exceed available memory
+* test_sum_lines:
+  * Test to check if sum of lines in target outputs match input line count
+* test_balancing:
+  * Test to check if targets are evenly loaded
+* test_throughput:
+  * Test to measure throughput in lines and kb
+* test_latency:
+  * test to check latency between sending last line and writing it to target output
