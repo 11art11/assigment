@@ -50,7 +50,7 @@ def setup(request):
     yield request.param
 
     # Archive the test artifacts
-    setup.archive(['./target_1_mount', './target_2_mount', './artifacts', f'./cribl/assignment/agent/inputs/{request.param}_events.log'], f'test_archive_{request.param}_events_{datetime.utcnow()}_zip')
+    setup.archive(['./target_1_mount', './target_2_mount', './artifacts', f'./cribl/assignment/agent/inputs/{request.param}_events.log'], f'test_archive_{request.param}_events_{datetime.utcnow()}.zip')
 
     # Stop and remove the Docker containers
     setup.docker("down")

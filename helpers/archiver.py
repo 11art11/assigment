@@ -26,12 +26,6 @@ class TestArtifactArchiver:
                     for root, _, files in os.walk(path):
                         for file in files:
                             file_path = os.path.join(root, file)
-                            zip_file.write(file_path, os.path.relpath(file_path, path))
-
+                            zip_file.write(file_path, os.path.join(os.path.relpath(path), file))
         print(f'Archive {archive_name} has been created in {self.artifacts_dir}')
 
-    def delete_artifacts(self):
-        """
-        Deletes all artifacts from the local location.
-        """
-        shutil.rmtree(self.artifacts_dir)
